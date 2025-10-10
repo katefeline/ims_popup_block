@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs_ee
+third_party_settings:
+  paragraphs_ee:
+    paragraphs_categories: {  }
+_core:
+  default_config_hash: 5zj9pzA-_knW52y88HqAW4GXF9lDuYqx5mYOTGZ_cJw
+id: ims_popup
+label: 'IMS Popup'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

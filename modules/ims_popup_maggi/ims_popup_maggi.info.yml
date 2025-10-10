@@ -1,0 +1,7 @@
+name: 'IMS Popup Maggi'
+type: module
+description: 'Extends Popup module with styles for Maggi theme'
+package: IMS
+core_version_requirement: ^10 || ^11
+dependencies:
+  - ims_popup:ims_popup

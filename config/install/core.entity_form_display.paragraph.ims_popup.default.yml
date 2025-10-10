@@ -1,0 +1,90 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.ims_popup.field_ims_popup_darken_bg
+    - field.field.paragraph.ims_popup.field_ims_popup_image
+    - field.field.paragraph.ims_popup.field_ims_popup_link
+    - field.field.paragraph.ims_popup.field_ims_popup_logo
+    - field.field.paragraph.ims_popup.field_ims_popup_repeat
+    - field.field.paragraph.ims_popup.field_ims_popup_text
+    - field.field.paragraph.ims_popup.field_ims_popup_timer
+    - field.field.paragraph.ims_popup.field_ims_popup_title
+    - image.style.thumbnail
+    - paragraphs.paragraphs_type.ims_popup
+  module:
+    - dsu_c_core
+    - link
+    - svg_image
+    - text
+_core:
+  default_config_hash: 1SK8Agp61oizohV_0aYAiGqM_i3Ud6qWdge9_wuT36k
+id: paragraph.ims_popup.default
+targetEntityType: paragraph
+bundle: ims_popup
+mode: default
+content:
+  field_ims_popup_darken_bg:
+    type: boolean_checkbox
+    weight: 7
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_ims_popup_image:
+    type: image_image
+    weight: 1
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+  field_ims_popup_link:
+    type: link_default
+    weight: 4
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  field_ims_popup_logo:
+    type: image_image
+    weight: 0
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+  field_ims_popup_repeat:
+    type: boolean_checkbox
+    weight: 15
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_ims_popup_text:
+    type: text_textfield
+    weight: 3
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_ims_popup_timer:
+    type: number
+    weight: 11
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_ims_popup_title:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

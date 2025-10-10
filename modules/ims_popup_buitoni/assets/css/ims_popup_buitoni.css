@@ -1,0 +1,34 @@
+.ims_popup__body__logo {
+  background-color: #00833e;
+}
+
+.ims_popup__body__link a {
+  color: #fefefe;
+  background-image: linear-gradient(90deg, #6fd99f 50%, #00833e 0);
+  background-size: 201% 100%;
+  background-position: 100% 100%;
+  transition: all 0.3s ease;
+  border-radius: 3.125rem;
+  width: 100%;
+}
+.ims_popup__body__link a:hover {
+  color: #00471e;
+  background-color: #6fd99f;
+}
+.ims_popup_close_color {
+  color: #00471e;
+}
+.ims_popup__body__title h3,
+.ims_popup__body__paragraph p {
+  font-size: 1.5rem;
+}
+/* Mobile Styling - Vertical */
+@media (max-width: 767px) {
+  .vertical .ims_popup__body__title h3,
+  .vertical .ims_popup__body__paragraph p {
+    font-size: 1rem;
+  }
+}
+.ims_popup_close_white {
+  color: white;
+}

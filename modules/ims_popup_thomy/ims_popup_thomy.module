@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for ims_popup_thomy module.
+ */
+
+/**
+ * File Doc Comment.
+ */
+function ims_popup_thomy_preprocess_paragraph__ims_popup(&$variables) {
+  $variables['#attached']['library'][] = 'ims_popup_thomy/ims_popup_thomy';
+}
+
+/**
+ * Preprocess function for ims_popup_block theme hook.
+ */
+function ims_popup_thomy_preprocess_ims_popup_block(&$variables) {
+  $variables['#attached']['library'][] = 'ims_popup_thomy/ims_popup_thomy';
+}

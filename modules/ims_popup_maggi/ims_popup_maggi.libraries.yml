@@ -1,0 +1,9 @@
+ims_popup_maggi:
+  version: 1.x
+  css:
+    theme:
+      assets/css/ims_popup_maggi.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings

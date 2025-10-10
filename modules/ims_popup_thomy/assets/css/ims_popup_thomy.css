@@ -1,0 +1,16 @@
+.ims_popup__body__logo {
+  background-color: #004ea8;
+}
+.ims_popup__body__link a {
+  color: #fefefe;
+  background-color: #004ea8;
+}
+.ims_popup__body__link a:hover {
+  background-color: #002661;
+}
+.ims_popup_close_color {
+  color: #002661;
+}
+.ims_popup_close_white {
+  color: white;
+}

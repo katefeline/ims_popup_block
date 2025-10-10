@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_ims_popup_darken_bg
+    - paragraphs.paragraphs_type.ims_popup
+id: paragraph.ims_popup.field_ims_popup_darken_bg
+field_name: field_ims_popup_darken_bg
+entity_type: paragraph
+bundle: ims_popup
+label: 'Darken background'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

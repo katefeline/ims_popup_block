@@ -1,0 +1,112 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.ims_popup.field_ims_popup_darken_bg
+    - field.field.paragraph.ims_popup.field_ims_popup_image
+    - field.field.paragraph.ims_popup.field_ims_popup_link
+    - field.field.paragraph.ims_popup.field_ims_popup_logo
+    - field.field.paragraph.ims_popup.field_ims_popup_repeat
+    - field.field.paragraph.ims_popup.field_ims_popup_text
+    - field.field.paragraph.ims_popup.field_ims_popup_timer
+    - field.field.paragraph.ims_popup.field_ims_popup_title
+    - paragraphs.paragraphs_type.ims_popup
+  module:
+    - link
+    - svg_image
+    - text
+_core:
+  default_config_hash: n33SkSFPi_7HL8YTWa-HR-igu1eadbsYIBlxawtKGkE
+id: paragraph.ims_popup.default
+targetEntityType: paragraph
+bundle: ims_popup
+mode: default
+content:
+  field_ims_popup_darken_bg:
+    type: boolean
+    label: hidden
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_ims_popup_image:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_ims_popup_link:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_ims_popup_logo:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_ims_popup_repeat:
+    type: boolean
+    label: hidden
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 9
+    region: content
+  field_ims_popup_text:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_ims_popup_timer:
+    type: number_integer
+    label: hidden
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  field_ims_popup_title:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 4
+    region: content
+hidden:
+  search_api_excerpt: true

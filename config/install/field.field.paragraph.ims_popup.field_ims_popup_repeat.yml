@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_ims_popup_repeat
+    - paragraphs.paragraphs_type.ims_popup
+id: paragraph.ims_popup.field_ims_popup_repeat
+field_name: field_ims_popup_repeat
+entity_type: paragraph
+bundle: ims_popup
+label: Repeatability
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

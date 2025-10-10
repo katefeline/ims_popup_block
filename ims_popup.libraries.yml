@@ -1,0 +1,10 @@
+ims_popup:
+  version: 1.x
+  css:
+    theme:
+      assets/css/ims_popup.css: {}
+  js:
+    assets/js/ims_popup.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
