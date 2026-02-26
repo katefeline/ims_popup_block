@@ -1,0 +1,50 @@
+{# ims_popup/templates/ims-popup-layout.html.twig #}
+
+<div data-popup-timer="{{ timer|default(0) }}" id='ims_popup'
+     data-popup-repeat="{{ repeat|default(1) }}"
+     class="ims_popup {% if background == 'On' %}darken_bg {% endif %}"
+     role="dialog" aria-modal="true" aria-labelledby="popup">
+
+    <div class="ims_popup__body">
+      <button id="ims_popup__close" class="{% if logo %}ims_popup_close_white{% else %}ims_popup_close_color{% endif %}" aria-label="Close popup" type="button">&times;</button>
+
+      {% if logo %}
+          <div class="ims_popup__body__logo">
+            {{ logo }}
+          </div>
+      {% endif %}
+
+      <div class="ims_popup__body__content">
+        {% if image %}
+          <div class="ims_popup__body__content_image">
+            {{ image }}
+          </div>
+        {% endif %}
+
+        <div class="ims_popup__body__content_text">
+          {% if title %}
+            <div class="ims_popup__body__title">
+              <h3>{{ title }}</h3>
+            </div>
+          {% endif %}
+
+          {% if text %}
+            <div class="ims_popup__body__paragraph">
+              <p>{{ text }}</p>
+            </div>
+          {% endif %}
+
+          {% if link_url %}
+            <div class="ims_popup__body__link {% if not text and not title %}ims_popup__body__link__padding{% endif %}">
+               {% if link_render %}
+                  {{ link_render }}
+               {% else %}
+                  <a href="{{ link_url }}" target="{{ link_target }}">{{ link_text }}</a>
+               {% endif %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+</div>
+{{ dump() }}

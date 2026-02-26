@@ -15,6 +15,9 @@ dependencies:
     - link
     - svg_image
     - text
+  enforced:
+    module:
+      - ims_popup_paragraph
 _core:
   default_config_hash: n33SkSFPi_7HL8YTWa-HR-igu1eadbsYIBlxawtKGkE
 id: paragraph.ims_popup.default

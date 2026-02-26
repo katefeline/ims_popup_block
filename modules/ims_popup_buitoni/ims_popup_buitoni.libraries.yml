@@ -3,7 +3,3 @@ ims_popup_buitoni:
   css:
     theme:
       assets/css/ims_popup_buitoni.css: {}
-  dependencies:
-    - core/jquery
-    - core/drupal
-    - core/drupalSettings

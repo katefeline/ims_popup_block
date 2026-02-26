@@ -3,11 +3,16 @@ status: true
 dependencies:
   module:
     - paragraphs
-id: paragraph.field_ims_popup_darken_bg
-field_name: field_ims_popup_darken_bg
+  enforced:
+    module:
+      - ims_popup_paragraph
+id: paragraph.field_ims_popup_timer
+field_name: field_ims_popup_timer
 entity_type: paragraph
-type: boolean
-settings: {  }
+type: integer
+settings:
+  unsigned: false
+  size: normal
 module: core
 locked: false
 cardinality: 1

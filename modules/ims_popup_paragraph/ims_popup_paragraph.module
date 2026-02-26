@@ -1,0 +1,139 @@
+<?php
+/**
+ * @file
+ * IMS Popup Paragraph submodule.
+ *
+ * Provides paragraph-specific functionality for IMS Popup.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function ims_popup_paragraph_theme($existing, $type, $theme, $path) {
+  return [
+    'paragraph__ims_popup' => [
+      'base hook' => 'paragraph',
+      'template' => 'paragraph--ims-popup',
+      'path' => $path . '/templates',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_paragraph__ims_popup().
+ */
+function ims_popup_paragraph_preprocess_paragraph__ims_popup(&$variables) {
+  $variables['#attached']['library'][] = 'ims_popup/ims_popup';
+
+  // Extract and prepare variables from the paragraph entity.
+  $content = $variables['content'];
+  $paragraph = $variables['paragraph'];
+
+  // Extract timer value.
+  $variables['timer'] = $content['field_ims_popup_timer'][0]['#markup'] ?? 0;
+
+  // Extract repeat value.
+  $variables['repeat'] = $paragraph->field_ims_popup_repeat->value ?? 1;
+
+  // Extract background value.
+  $variables['background'] = $content['field_ims_popup_darken_bg'][0]['#markup'] ?? NULL;
+
+  // Extract logo render array.
+  $variables['logo'] = $content['field_ims_popup_logo'][0]['#item'] ?? NULL;
+
+  // Extract image render array.
+  $variables['image'] = $content['field_ims_popup_image'] ?? NULL;
+
+  // Extract title value from field.
+  if (!empty($content['field_ims_popup_title'][0]['#context']['value'])) {
+    $variables['title'] = $content['field_ims_popup_title'][0]['#context']['value'];
+  } else {
+    $variables['title'] = NULL;
+  }
+
+  // Extract text value from field.
+  if (!empty($content['field_ims_popup_text'][0]['#text'])) {
+    $variables['text'] = $content['field_ims_popup_text'][0]['#text'];
+  } elseif (!empty($paragraph->field_ims_popup_text->value)) {
+    $variables['text'] = $paragraph->field_ims_popup_text->value;
+  } else {
+    $variables['text'] = NULL;
+  }
+
+  // Extract link render array.
+  $variables['link_render'] = $content['field_ims_popup_link'] ?? NULL;
+
+  // Extract link details (URL, text, target) if not using link_render.
+  $link_field = $paragraph->field_ims_popup_link;
+  if (!$link_field->isEmpty()) {
+    $link = $link_field->first()->getUrl();
+    $variables['link_url'] = $link->toString();
+    $variables['link_text'] = $link_field->first()->title ?? 'Link';
+    $variables['link_target'] = $link_field->first()->options['attributes']['target'] ?? NULL;
+  } else {
+    $variables['link_url'] = NULL;
+    $variables['link_text'] = NULL;
+    $variables['link_target'] = NULL;
+  }
+}
+
+/**
+ * Implements hook_entity_update().
+ *
+ * Invalidate block render cache when an ims_popup paragraph is updated.
+ */
+function ims_popup_paragraph_entity_update(\Drupal\Core\Entity\EntityInterface $entity) {
+  // Only handle paragraph updates
+  if ($entity->getEntityTypeId() !== 'paragraph') {
+    return;
+  }
+
+  // Only handle ims_popup paragraphs
+  if ($entity->bundle() !== 'ims_popup') {
+    return;
+  }
+
+  // Invalidate block render cache when paragraph changes
+  \Drupal\Core\Cache\Cache::invalidateTags(['block_view']);
+}
+
+/**
+ * Implements hook_entity_delete().
+ *
+ * Invalidate block render cache when an ims_popup paragraph is deleted.
+ */
+function ims_popup_paragraph_entity_delete(\Drupal\Core\Entity\EntityInterface $entity) {
+  // Only handle paragraph deletions
+  if ($entity->getEntityTypeId() !== 'paragraph') {
+    return;
+  }
+
+  // Only handle ims_popup paragraphs
+  if ($entity->bundle() !== 'ims_popup') {
+    return;
+  }
+
+  // Invalidate block render cache when paragraph is deleted
+  \Drupal\Core\Cache\Cache::invalidateTags(['block_view']);
+}
+
+/**
+ * Implements hook_entity_insert().
+ *
+ * Invalidate block render cache when an ims_popup paragraph is created.
+ */
+function ims_popup_paragraph_entity_insert(\Drupal\Core\Entity\EntityInterface $entity) {
+  // Only handle paragraph inserts
+  if ($entity->getEntityTypeId() !== 'paragraph') {
+    return;
+  }
+
+  // Only handle ims_popup paragraphs
+  if ($entity->bundle() !== 'ims_popup') {
+    return;
+  }
+
+  // Invalidate block render cache when paragraph is created
+  \Drupal\Core\Cache\Cache::invalidateTags(['block_view']);
+}
+

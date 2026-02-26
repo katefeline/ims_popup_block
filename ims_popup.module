@@ -12,9 +12,22 @@
  */
 function ims_popup_theme($existing, $type, $theme, $path) {
   return [
-    'paragraph__ims_popup' => [
-      'base hook' => 'paragraph',
-      'template' => 'paragraph--ims-popup',
+    'ims_popup_layout' => [
+      'variables' => [
+        'timer' => 0,
+        'repeat' => 1,
+        'background' => NULL,
+        'logo' => NULL,
+        'image' => NULL,
+        'title' => NULL,
+        'text' => NULL,
+        'link_url' => NULL,
+        'link_text' => NULL,
+        'link_target' => NULL,
+        'link_render' => NULL,
+      ],
+      'template' => 'ims-popup-layout',
+      'path' => $path . '/templates',
     ],
     'ims_popup_block' => [
       'variables' => [
@@ -34,55 +47,11 @@ function ims_popup_theme($existing, $type, $theme, $path) {
         'ims_popup_repeat' => NULL,
       ],
       'template' => 'ims-popup-block',
+      'path' => $path . '/templates',
     ],
   ];
 }
 
-/**
- * Implements hook_preprocess_paragraph__ims_popup().
- */
-function ims_popup_preprocess_paragraph__ims_popup(&$variables) {
-  $variables['#attached']['library'][] = 'ims_popup/ims_popup';
-}
 
-/**
- * Implements hook_install().
- */
-function ims_popup_install() {
-  \Drupal::service('config.installer')
-    ->installDefaultConfig('module', 'ims_popup');
-}
 
-/**
- * Implements hook_uninstall().
- */
-function ims_popup_uninstall() {
-  $configs = [
-    'core.entity_form_display.paragraph.ims_popup.default',
-    'core.entity_view_display.paragraph.ims_popup.default',
-    'field.field.paragraph.ims_popup.field_ims_popup_darken_bg',
-    'field.field.paragraph.ims_popup.field_ims_popup_image',
-    'field.field.paragraph.ims_popup.field_ims_popup_link',
-    'field.field.paragraph.ims_popup.field_ims_popup_logo',
-    'field.field.paragraph.ims_popup.field_ims_popup_repeat',
-    'field.field.paragraph.ims_popup.field_ims_popup_text',
-    'field.field.paragraph.ims_popup.field_ims_popup_timer',
-    'field.field.paragraph.ims_popup.field_ims_popup_title',
-    'field.storage.paragraph.field_ims_popup_darken_bg',
-    'field.storage.paragraph.field_ims_popup_image',
-    'field.storage.paragraph.field_ims_popup_link',
-    'field.storage.paragraph.field_ims_popup_logo',
-    'field.storage.paragraph.field_ims_popup_repeat',
-    'field.storage.paragraph.field_ims_popup_text',
-    'field.storage.paragraph.field_ims_popup_timer',
-    'field.storage.paragraph.field_ims_popup_title',
-    'paragraphs.paragraphs_type.ims_popup',
-  ];
 
-  foreach ($configs as $config_name) {
-    $config = \Drupal::configFactory()->getEditable($config_name);
-    if (\Drupal::configFactory()->get($config_name)->get('id')) {
-      $config->delete();
-    }
-  }
-}

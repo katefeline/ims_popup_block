@@ -3,7 +3,3 @@ ims_popup_maggi:
   css:
     theme:
       assets/css/ims_popup_maggi.css: {}
-  dependencies:
-    - core/jquery
-    - core/drupal
-    - core/drupalSettings

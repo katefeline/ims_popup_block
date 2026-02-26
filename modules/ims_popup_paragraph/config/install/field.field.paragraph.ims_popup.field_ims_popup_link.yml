@@ -6,6 +6,9 @@ dependencies:
     - paragraphs.paragraphs_type.ims_popup
   module:
     - link
+  enforced:
+    module:
+      - ims_popup_paragraph
 _core:
   default_config_hash: VfWaItx-Cau1tOkC8W4Dfiev5Y7h9Wsil5Zpem9WDdo
 id: paragraph.ims_popup.field_ims_popup_link

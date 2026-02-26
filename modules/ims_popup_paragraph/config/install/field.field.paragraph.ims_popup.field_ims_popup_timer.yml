@@ -4,6 +4,9 @@ dependencies:
   config:
     - field.storage.paragraph.field_ims_popup_timer
     - paragraphs.paragraphs_type.ims_popup
+  enforced:
+    module:
+      - ims_popup_paragraph
 id: paragraph.ims_popup.field_ims_popup_timer
 field_name: field_ims_popup_timer
 entity_type: paragraph

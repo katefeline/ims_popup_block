@@ -4,6 +4,9 @@ dependencies:
   module:
     - link
     - paragraphs
+  enforced:
+    module:
+      - ims_popup_paragraph
 id: paragraph.field_ims_popup_link
 field_name: field_ims_popup_link
 entity_type: paragraph

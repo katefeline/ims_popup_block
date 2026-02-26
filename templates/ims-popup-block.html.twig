@@ -1,40 +1,13 @@
-<div data-popup-timer="{{ ims_popup_timer }}" id='ims_popup'
-     data-popup-repeat="{{ ims_popup_repeat }}"
-     class="ims_popup {% if ims_popup_background == "On" %}darken_bg {% endif %}"
-     role="dialog" aria-modal="true" aria-labelledby="popup">
-    <div class="ims_popup__body">
-      <button id="ims_popup__close" class="{% if ims_popup_logo %}ims_popup_close_white{% else %}ims_popup_close_color{% endif %}" aria-label="Close popup" href="javascript:void(0);">&times;</button>
-      {% if ims_popup_logo %}
-          <div class="ims_popup__body__logo">
-            {{ ims_popup_logo }}
-          </div>
-      {% endif %}
-      <div class="ims_popup__body__content">
-        {% if ims_popup_image %}
-          <div class="ims_popup__body__content_image">
-            {{ ims_popup_image }}
-          </div>
-        {% endif %}
-        <div class="ims_popup__body__content_text">
-          {% if ims_popup_title %}
-            <div class="ims_popup__body__title">
-              <h3>{{ ims_popup_title }}</h3>
-            </div>
-          {% endif %}
-          {% if ims_popup_text %}
-            <div class="ims_popup__body__paragraph">
-              <p>
-                {{ ims_popup_text }}
-              </p>
-            </div>
-          {% endif %}
-          {% if ims_popup_link_url %}
-            <div class="ims_popup__body__link {% if not ims_popup_text and not ims_popup_title %}ims_popup__body__link__padding{% endif %}">
-              <a href="{{ ims_popup_link_url }}" target="{{ims_popup_link_target}}">{{ ims_popup_link_text }}</a>
-            </div>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-</div>
-{{dump()}}
+{# ims_popup/templates/ims-popup-block.html.twig #}
+{% include '@ims_popup/ims-popup-layout.html.twig' with {
+  'timer': ims_popup_timer,
+  'repeat': ims_popup_repeat,
+  'background': ims_popup_background,
+  'logo': ims_popup_logo,
+  'image': ims_popup_image,
+  'title': ims_popup_title,
+  'text': ims_popup_text,
+  'link_url': ims_popup_link_url,
+  'link_text': ims_popup_link_text,
+  'link_target': ims_popup_link_target
+} only %}

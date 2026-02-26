@@ -9,8 +9,10 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileUrlGeneratorInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Cache\Cache;
+use Drupal\node\NodeInterface;
 
 /**
  * Provides a 'Ims Popup' Block.
@@ -35,12 +37,18 @@ class ImsPopupBlock extends BlockBase implements ContainerFactoryPluginInterface
   protected FileUrlGeneratorInterface $fileUrlGenerator;
 
   /**
+   * Current route match service.
+   */
+  protected RouteMatchInterface $currentRouteMatch;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, FileUrlGeneratorInterface $file_url_generator) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, FileUrlGeneratorInterface $file_url_generator, RouteMatchInterface $current_route_match) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityTypeManager = $entity_type_manager;
     $this->fileUrlGenerator = $file_url_generator;
+    $this->currentRouteMatch = $current_route_match;
   }
 
   /**
@@ -53,6 +61,7 @@ class ImsPopupBlock extends BlockBase implements ContainerFactoryPluginInterface
       $plugin_definition,
       $container->get('entity_type.manager'),
       $container->get('file_url_generator'),
+      $container->get('current_route_match'),
     );
   }
 
@@ -60,6 +69,38 @@ class ImsPopupBlock extends BlockBase implements ContainerFactoryPluginInterface
    * {@inheritdoc}
    */
   public function build() {
+    $node = NULL;
+    if ($this->currentRouteMatch !== NULL) {
+      $node = $this->currentRouteMatch->getParameter('node');
+    }
+    $has_popup_paragraph = FALSE;
+    if ($node instanceof NodeInterface) {
+      // Проходимось по всіх полях ноди, щоб знайти поля з параграфами.
+      foreach ($node->getFieldDefinitions() as $field_name => $field_definition) {
+        if ($field_definition->getType() === 'entity_reference_revisions' && $field_definition->getSetting('target_type') === 'paragraph') {
+
+          // Отримуємо лише ті параграфи, які існують у ПОТОЧНІЙ ревізії ноди.
+          $paragraphs = $node->get($field_name)->referencedEntities();
+          foreach ($paragraphs as $paragraph) {
+            if ($paragraph->bundle() === 'ims_popup') {
+              $has_popup_paragraph = TRUE;
+              break 2; // Знайшли потрібний параграф - виходимо з обох циклів.
+            }
+          }
+        }
+      }
+    }
+
+    if ($has_popup_paragraph && $node instanceof NodeInterface) {
+      return [
+        '#cache' => [
+          'tags' => ['node:' . $node->id()],
+          'contexts' => ['route'],
+        ],
+      ];
+    }
+
+
     // Extract configuration values matching ims_popup variables.
     $ims_popup_title = $this->configuration['ims_popup_title'] ?? '';
     $ims_popup_text = $this->configuration['ims_popup_text'] ?? '';
@@ -134,8 +175,9 @@ class ImsPopupBlock extends BlockBase implements ContainerFactoryPluginInterface
         'tags' => array_filter([
           $ims_popup_image_mid ? 'media:' . $ims_popup_image_mid : NULL,
           $ims_popup_logo_mid ? 'media:' . $ims_popup_logo_mid : NULL,
+          $node instanceof NodeInterface ? 'node:' . $node->id() : NULL,
         ]),
-        'contexts' => ['languages'],
+        'contexts' => ['languages', 'route'],
         'max-age' => Cache::PERMANENT,
       ],
     ];
@@ -158,15 +200,15 @@ class ImsPopupBlock extends BlockBase implements ContainerFactoryPluginInterface
       '#default_value' => $this->configuration['ims_popup_text'] ?? '',
       '#required' => FALSE,
     ];
-    $form['ims_popup_image_upload'] = [
-      '#type' => 'managed_file',
-      '#title' => $this->t('Popup Image'),
-      '#description' => $this->t('Upload an image for the popup.'),
-      '#default_value' => !empty($this->configuration['ims_popup_image_fid']) ? [$this->configuration['ims_popup_image_fid']] : NULL,
-      '#upload_location' => 'public://ims_popup_images/',
-      '#upload_validators' => [
-        'file_validate_extensions' => ['png jpg jpeg gif svg'],
+    $form['ims_popup_image_mid'] = [
+      '#type' => 'entity_autocomplete',
+      '#target_type' => 'media',
+      '#selection_settings' => [
+        'target_bundles' => ['image'],
       ],
+      '#title' => $this->t('Popup Image'),
+      '#description' => $this->t('Select an image media entity for the popup.'),
+      '#default_value' => !empty($this->configuration['ims_popup_image_mid']) ? $this->entityTypeManager->getStorage('media')->load($this->configuration['ims_popup_image_mid']) : NULL,
       '#required' => FALSE,
     ];
     $form['ims_popup_image_alt'] = [
@@ -183,15 +225,15 @@ class ImsPopupBlock extends BlockBase implements ContainerFactoryPluginInterface
       '#maxlength' => 255,
       '#required' => FALSE,
     ];
-    $form['ims_popup_logo_upload'] = [
-      '#type' => 'managed_file',
-      '#title' => $this->t('Popup Logo'),
-      '#description' => $this->t('Upload a logo for the popup.'),
-      '#default_value' => !empty($this->configuration['ims_popup_logo_fid']) ? [$this->configuration['ims_popup_logo_fid']] : NULL,
-      '#upload_location' => 'public://ims_popup_logos/',
-      '#upload_validators' => [
-        'file_validate_extensions' => ['png jpg jpeg gif svg'],
+    $form['ims_popup_logo_mid'] = [
+      '#type' => 'entity_autocomplete',
+      '#target_type' => 'media',
+      '#selection_settings' => [
+        'target_bundles' => ['image'],
       ],
+      '#title' => $this->t('Popup Logo'),
+      '#description' => $this->t('Select an image media entity for the popup logo.'),
+      '#default_value' => !empty($this->configuration['ims_popup_logo_mid']) ? $this->entityTypeManager->getStorage('media')->load($this->configuration['ims_popup_logo_mid']) : NULL,
       '#required' => FALSE,
     ];
     $form['ims_popup_logo_alt'] = [
@@ -278,30 +320,30 @@ class ImsPopupBlock extends BlockBase implements ContainerFactoryPluginInterface
     if (!empty($link_url) && empty($link_text)) {
       $form_state->setErrorByName('ims_popup_link_text', $this->t('Link text is required when a link URL is provided.'));
     }
-    // Validate image alt/title if image uploaded.
-    $image_fids = (array) $form_state->getValue('ims_popup_image_upload');
-    $has_image = !empty($image_fids) && !empty($image_fids[0]);
+    // Validate image alt/title if image selected.
+    $image_mid = $form_state->getValue('ims_popup_image_mid');
+    $has_image = !empty($image_mid);
     if ($has_image) {
       $alt = trim((string) $form_state->getValue('ims_popup_image_alt'));
       $title = trim((string) $form_state->getValue('ims_popup_image_title'));
       if ($alt === '') {
-        $form_state->setErrorByName('ims_popup_image_alt', $this->t('Alt text is required for the uploaded image.'));
+        $form_state->setErrorByName('ims_popup_image_alt', $this->t('Alt text is required for the selected image.'));
       }
       if ($title === '') {
-        $form_state->setErrorByName('ims_popup_image_title', $this->t('Image title is required for the uploaded image.'));
+        $form_state->setErrorByName('ims_popup_image_title', $this->t('Image title is required for the selected image.'));
       }
     }
-    // Validate logo alt/title if logo uploaded.
-    $logo_fids = (array) $form_state->getValue('ims_popup_logo_upload');
-    $has_logo = !empty($logo_fids) && !empty($logo_fids[0]);
+    // Validate logo alt/title if logo selected.
+    $logo_mid = $form_state->getValue('ims_popup_logo_mid');
+    $has_logo = !empty($logo_mid);
     if ($has_logo) {
       $alt = trim((string) $form_state->getValue('ims_popup_logo_alt'));
       $title = trim((string) $form_state->getValue('ims_popup_logo_title'));
       if ($alt === '') {
-        $form_state->setErrorByName('ims_popup_logo_alt', $this->t('Alt text is required for the uploaded logo.'));
+        $form_state->setErrorByName('ims_popup_logo_alt', $this->t('Alt text is required for the selected logo.'));
       }
       if ($title === '') {
-        $form_state->setErrorByName('ims_popup_logo_title', $this->t('Logo title is required for the uploaded logo.'));
+        $form_state->setErrorByName('ims_popup_logo_title', $this->t('Logo title is required for the selected logo.'));
       }
     }
   }
@@ -316,88 +358,14 @@ class ImsPopupBlock extends BlockBase implements ContainerFactoryPluginInterface
     $this->configuration['ims_popup_image_title'] = $form_state->getValue('ims_popup_image_title');
     $this->configuration['ims_popup_logo_alt'] = $form_state->getValue('ims_popup_logo_alt');
     $this->configuration['ims_popup_logo_title'] = $form_state->getValue('ims_popup_logo_title');
-    // If new image is uploaded, it must be stored.
-    $image_fid = $form_state->getValue('ims_popup_image_upload');
-    if (!empty($image_fid[0])) {
-      $file = $this->entityTypeManager->getStorage('file')->load($image_fid[0]);
-      if ($file) {
-        $file->setPermanent();
-        $file->save();
-        $this->configuration['ims_popup_image_fid'] = $file->id();
-        $media_storage = $this->entityTypeManager->getStorage('media');
-        $media = NULL;
-        if (!empty($this->configuration['ims_popup_image_mid'])) {
-          $media = $media_storage->load($this->configuration['ims_popup_image_mid']);
-        }
-        if (!$media) {
-          $media = $media_storage->create([
-            'bundle' => 'image',
-            'name' => $file->getFilename(),
-            'field_media_image' => [
-              'target_id' => $file->id(),
-              'alt' => $this->configuration['ims_popup_image_alt'] ?: $file->getFilename(),
-              'title' => $this->configuration['ims_popup_image_title'] ?: $file->getFilename(),
-            ],
-            'status' => 1,
-          ]);
-        } else {
-          $media->set('field_media_image', [
-            'target_id' => $file->id(),
-            'alt' => $this->configuration['ims_popup_image_alt'] ?: $file->getFilename(),
-            'title' => $this->configuration['ims_popup_image_title'] ?: $file->getFilename(),
-          ]);
-        }
-        $media->set('name', $this->configuration['ims_popup_image_title'] ?: $file->getFilename());
-        $media->save();
-        $this->configuration['ims_popup_image_mid'] = $media->id();
-      }
-    } else {
-      $this->configuration['ims_popup_image_fid'] = NULL;
-      $this->configuration['ims_popup_image_mid'] = NULL;
-      $this->configuration['ims_popup_image_alt'] = NULL;
-      $this->configuration['ims_popup_image_title'] = NULL;
-    }
-    // If new logo image is uploaded, it must be stored.
-    $logo_fid = $form_state->getValue('ims_popup_logo_upload');
-    if (!empty($logo_fid[0])) {
-      $file = $this->entityTypeManager->getStorage('file')->load($logo_fid[0]);
-      if ($file) {
-        $file->setPermanent();
-        $file->save();
-        $this->configuration['ims_popup_logo_fid'] = $file->id();
-        $media_storage = $this->entityTypeManager->getStorage('media');
-        $media = NULL;
-        if (!empty($this->configuration['ims_popup_logo_mid'])) {
-          $media = $media_storage->load($this->configuration['ims_popup_logo_mid']);
-        }
-        if (!$media) {
-          $media = $media_storage->create([
-            'bundle' => 'image',
-            'name' => $file->getFilename(),
-            'field_media_image' => [
-              'target_id' => $file->id(),
-              'alt' => $this->configuration['ims_popup_logo_alt'] ?: $file->getFilename(),
-              'title' => $this->configuration['ims_popup_logo_title'] ?: $file->getFilename(),
-            ],
-            'status' => 1,
-          ]);
-        } else {
-          $media->set('field_media_image', [
-            'target_id' => $file->id(),
-            'alt' => $this->configuration['ims_popup_logo_alt'] ?: $file->getFilename(),
-            'title' => $this->configuration['ims_popup_logo_title'] ?: $file->getFilename(),
-          ]);
-        }
-        $media->set('name', $this->configuration['ims_popup_logo_title'] ?: $file->getFilename());
-        $media->save();
-        $this->configuration['ims_popup_logo_mid'] = $media->id();
-      }
-    } else {
-      $this->configuration['ims_popup_logo_fid'] = NULL;
-      $this->configuration['ims_popup_logo_mid'] = NULL;
-      $this->configuration['ims_popup_logo_alt'] = NULL;
-      $this->configuration['ims_popup_logo_title'] = NULL;
-    }
+
+    // Store the selected media entity ID for image.
+    $image_mid = $form_state->getValue('ims_popup_image_mid');
+    $this->configuration['ims_popup_image_mid'] = !empty($image_mid) ? $image_mid : NULL;
+
+    // Store the selected media entity ID for logo.
+    $logo_mid = $form_state->getValue('ims_popup_logo_mid');
+    $this->configuration['ims_popup_logo_mid'] = !empty($logo_mid) ? $logo_mid : NULL;
     $this->configuration['ims_popup_link_url'] = $form_state->getValue('ims_popup_link_url');
     $this->configuration['ims_popup_link_text'] = $form_state->getValue('ims_popup_link_text');
     $this->configuration['ims_popup_link_target'] = $form_state->getValue('ims_popup_link_target');
@@ -405,4 +373,4 @@ class ImsPopupBlock extends BlockBase implements ContainerFactoryPluginInterface
     $this->configuration['ims_popup_background'] = $form_state->getValue('ims_popup_background');
     $this->configuration['ims_popup_repeat'] = $form_state->getValue('ims_popup_repeat');
   }
-}          
+}

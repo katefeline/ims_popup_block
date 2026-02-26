@@ -1,0 +1,47 @@
+block.plugin.ims_popup_block:
+  type: block_settings
+  label: 'IMS Popup block'
+  mapping:
+    ims_popup_title:
+      type: label
+      label: 'Popup Title'
+    ims_popup_text:
+      type: text
+      label: 'Popup Text'
+    ims_popup_image_mid:
+      type: integer
+      label: 'Popup Image media ID'
+    ims_popup_image_alt:
+      type: string
+      label: 'Popup Image Alt Text'
+    ims_popup_image_title:
+      type: string
+      label: 'Popup Image Title'
+    ims_popup_logo_mid:
+      type: integer
+      label: 'Popup Logo media ID'
+    ims_popup_logo_alt:
+      type: string
+      label: 'Popup Logo Alt Text'
+    ims_popup_logo_title:
+      type: string
+      label: 'Popup Logo Title'
+    ims_popup_link_url:
+      type: uri
+      label: 'Link URL'
+    ims_popup_link_text:
+      type: string
+      label: 'Link Text'
+    ims_popup_link_target:
+      type: string
+      label: 'Link Target'
+    ims_popup_timer:
+      type: integer
+      label: 'Popup Timer (seconds)'
+    ims_popup_background:
+      type: string
+      label: 'Darken Background'
+    ims_popup_repeat:
+      type: string
+      label: 'Repeat Popup'
+

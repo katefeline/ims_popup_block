@@ -3,6 +3,9 @@ status: true
 dependencies:
   module:
     - paragraphs_ee
+  enforced:
+    module:
+      - ims_popup_paragraph
 third_party_settings:
   paragraphs_ee:
     paragraphs_categories: {  }

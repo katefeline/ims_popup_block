@@ -1,0 +1,8 @@
+name: IMS Popup Paragraph
+package: IMS
+type: module
+core_version_requirement: ^10 || ^11
+description: 'Provides paragraph-specific functionality for IMS Popup.'
+dependencies:
+  - ims_popup:ims_popup
+  - drupal:paragraphs

@@ -5,11 +5,11 @@ dependencies:
     - field.storage.paragraph.field_ims_popup_text
     - paragraphs.paragraphs_type.ims_popup
   module:
-    - allowed_formats
     - text
-third_party_settings:
-  allowed_formats:
-    allowed_formats: {  }
+  enforced:
+    module:
+      - ims_popup_paragraph
+third_party_settings: {  }
 id: paragraph.ims_popup.field_ims_popup_text
 field_name: field_ims_popup_text
 entity_type: paragraph
@@ -20,6 +20,5 @@ required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
-settings:
-  allowed_formats: {  }
+settings: {  }
 field_type: text

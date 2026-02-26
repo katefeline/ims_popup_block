@@ -5,10 +5,11 @@ dependencies:
     - file
     - image
     - paragraphs
-_core:
-  default_config_hash: Rx_GG_FEja2zBnfYtN4E8ZSi32WM_2gZCylmIAOKBjI
-id: paragraph.field_ims_popup_logo
-field_name: field_ims_popup_logo
+  enforced:
+    module:
+      - ims_popup_paragraph
+id: paragraph.field_ims_popup_image
+field_name: field_ims_popup_image
 entity_type: paragraph
 type: image
 settings:
@@ -18,10 +19,10 @@ settings:
   uri_scheme: public
   default_image:
     uuid: ''
-    alt: logo
+    alt: ''
     title: ''
-    width: 803
-    height: 505
+    width: null
+    height: null
 module: image
 locked: false
 cardinality: 1

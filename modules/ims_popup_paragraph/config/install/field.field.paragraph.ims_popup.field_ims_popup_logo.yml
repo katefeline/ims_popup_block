@@ -2,17 +2,20 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.paragraph.field_ims_popup_image
+    - field.storage.paragraph.field_ims_popup_logo
     - paragraphs.paragraphs_type.ims_popup
   module:
     - image
+  enforced:
+    module:
+      - ims_popup_paragraph
 _core:
-  default_config_hash: Y9bqzYSgyOM9Gba-engS-4iXEBJb4xtziaA1G4AS1Kk
-id: paragraph.ims_popup.field_ims_popup_image
-field_name: field_ims_popup_image
+  default_config_hash: WJFw1QHgxL17YYAkI1ZpRrdSatWoHSXpkZ72WzBmawg
+id: paragraph.ims_popup.field_ims_popup_logo
+field_name: field_ims_popup_logo
 entity_type: paragraph
 bundle: ims_popup
-label: Image
+label: Logo
 description: ''
 required: false
 translatable: false

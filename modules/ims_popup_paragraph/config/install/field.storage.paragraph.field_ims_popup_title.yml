@@ -3,6 +3,9 @@ status: true
 dependencies:
   module:
     - paragraphs
+  enforced:
+    module:
+      - ims_popup_paragraph
 id: paragraph.field_ims_popup_title
 field_name: field_ims_popup_title
 entity_type: paragraph
