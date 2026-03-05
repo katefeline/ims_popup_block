@@ -7,14 +7,11 @@
 
 /**
  * Preprocess function for ims_popup paragraph.
+ *
+ * Attaches Maggi-specific styling to paragraph-based popups.
  */
 function ims_popup_maggi_preprocess_paragraph__ims_popup(&$variables) {
   $variables['#attached']['library'][] = 'ims_popup_maggi/ims_popup_maggi';
 }
 
-///**
-// * Preprocess function for ims_popup_block theme hook.
-// */
-//function ims_popup_maggi_preprocess_ims_popup_block(&$variables) {
-//  $variables['#attached']['library'][] = 'ims_popup_maggi/ims_popup_maggi';
-//}
+

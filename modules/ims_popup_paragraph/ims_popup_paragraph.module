@@ -39,7 +39,7 @@ function ims_popup_paragraph_preprocess_paragraph__ims_popup(&$variables) {
   $variables['background'] = $content['field_ims_popup_darken_bg'][0]['#markup'] ?? NULL;
 
   // Extract logo render array.
-  $variables['logo'] = $content['field_ims_popup_logo'][0]['#item'] ?? NULL;
+  $variables['logo'] = $content['field_ims_popup_logo'] ?? NULL;
 
   // Extract image render array.
   $variables['image'] = $content['field_ims_popup_image'] ?? NULL;
@@ -61,9 +61,9 @@ function ims_popup_paragraph_preprocess_paragraph__ims_popup(&$variables) {
   }
 
   // Extract link render array.
-  $variables['link_render'] = $content['field_ims_popup_link'] ?? NULL;
+//  $variables['link_render'] = $content['field_ims_popup_link'] ?? NULL;
 
-  // Extract link details (URL, text, target) if not using link_render.
+  // Extract link details (URL, text, target)
   $link_field = $paragraph->field_ims_popup_link;
   if (!$link_field->isEmpty()) {
     $link = $link_field->first()->getUrl();

@@ -14,7 +14,7 @@ function ims_popup_theme($existing, $type, $theme, $path) {
   return [
     'ims_popup_layout' => [
       'variables' => [
-        'timer' => 0,
+        'timer' => 1,
         'repeat' => 1,
         'background' => NULL,
         'logo' => NULL,
@@ -24,7 +24,6 @@ function ims_popup_theme($existing, $type, $theme, $path) {
         'link_url' => NULL,
         'link_text' => NULL,
         'link_target' => NULL,
-        'link_render' => NULL,
       ],
       'template' => 'ims-popup-layout',
       'path' => $path . '/templates',

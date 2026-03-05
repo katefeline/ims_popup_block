@@ -36,11 +36,7 @@
 
           {% if link_url %}
             <div class="ims_popup__body__link {% if not text and not title %}ims_popup__body__link__padding{% endif %}">
-               {% if link_render %}
-                  {{ link_render }}
-               {% else %}
                   <a href="{{ link_url }}" target="{{ link_target }}">{{ link_text }}</a>
-               {% endif %}
             </div>
           {% endif %}
         </div>

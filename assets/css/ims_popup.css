@@ -27,7 +27,7 @@
   position: relative;
   box-shadow: 0.25rem 0.75rem 0.625rem 0.0625rem rgba(0, 0, 0, 0.13);
   transition: all 2s ease-in-out;
-  overflow: auto;
+  overflow: visible;
   width: 40%;
   max-height: 80vh;
 }
@@ -41,8 +41,8 @@
 
 .ims_popup__body__logo img {
   z-index: 10;
-  /* max-height: min(100px, 10vw);
-  max-width: min(100px, 10vw); */
+  max-height: min(100px, 10vw);
+  max-width: min(100px, 10vw);
   overflow: visible;
 }
 
