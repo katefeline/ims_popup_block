@@ -27,7 +27,7 @@ block.plugin.ims_popup_block:
       type: string
       label: 'Popup Logo Title'
     ims_popup_link_url:
-      type: uri
+      type: string
       label: 'Link URL'
     ims_popup_link_text:
       type: string
