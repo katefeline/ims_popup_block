@@ -6,7 +6,7 @@ use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
- * Provides a 'Ims Popup' Block.
+ * Provides the IMS Popup block plugin.
  */
 #[Block(
   id: "ims_popup_block",
@@ -30,12 +30,12 @@ class ImsPopupBlock extends ImsPopupBaseBlock {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   protected function getLibrary(): array {
     $libraries = ['ims_popup/ims_popup'];
 
-    // Check for enabled submodules and add their libraries.
+    // Attach brand-specific styling libraries from enabled brand submodules.
     $submodules = ['ims_popup_maggi', 'ims_popup_buitoni', 'ims_popup_thomy'];
 
     foreach ($submodules as $submodule) {

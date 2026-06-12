@@ -13,7 +13,7 @@ use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Abstract Class for IMS Popup blocks.
+ * Provides shared functionality for IMS Popup block plugins.
  */
 abstract class ImsPopupBaseBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
@@ -40,7 +40,20 @@ abstract class ImsPopupBaseBlock extends BlockBase implements ContainerFactoryPl
   protected ModuleHandlerInterface $moduleHandler;
 
   /**
-   * Class constructor for block.
+   * Constructs an IMS Popup block plugin instance.
+   *
+   * @param array $configuration
+   *   A configuration array containing plugin instance information.
+   * @param string $plugin_id
+   *   The plugin ID for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $current_route_match
+   *   The current route match.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    */
   public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityTypeManagerInterface $entity_type_manager, RouteMatchInterface $current_route_match, ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -64,7 +77,10 @@ abstract class ImsPopupBaseBlock extends BlockBase implements ContainerFactoryPl
   }
 
   /**
-   * Method for preparing data before build block process.
+   * Builds the popup render array with resolved configuration values.
+   *
+   * @return array
+   *   A popup block render array.
    */
   protected function preBuild() {
     $node = NULL;
@@ -106,21 +122,21 @@ abstract class ImsPopupBaseBlock extends BlockBase implements ContainerFactoryPl
     $ims_popup_background = $this->configuration['ims_popup_background'] ?? '';
     $ims_popup_repeat = $this->configuration['ims_popup_repeat'] ?? '';
 
-    // Process image media entity.
+    // Build the configured popup image render array, if available.
     $ims_popup_image = $this->buildMediaImageRenderArray(
       $ims_popup_image_mid,
       $ims_popup_image_alt,
       $ims_popup_image_title
     );
 
-    // Process logo media entity.
+    // Build the configured popup logo render array, if available.
     $ims_popup_logo = $this->buildMediaImageRenderArray(
       $ims_popup_logo_mid,
       $ims_popup_logo_alt,
       $ims_popup_logo_title
     );
 
-    // Build render array for the block.
+    // Build the final popup block render array.
     return [
       '#theme' => $this->getTheme(),
       '#ims_popup_title' => $ims_popup_title,
@@ -153,13 +169,13 @@ abstract class ImsPopupBaseBlock extends BlockBase implements ContainerFactoryPl
   }
 
   /**
-   * Method contains render array without values.
+   * Builds an empty render array with cacheability metadata.
    *
    * @param \Drupal\node\NodeInterface|null $node
    *   The current node entity.
    *
    * @return array
-   *   Minimum data for empty return.
+   *   An empty render array.
    */
   protected function noRender(?NodeInterface $node = NULL): array {
     return [
@@ -173,9 +189,9 @@ abstract class ImsPopupBaseBlock extends BlockBase implements ContainerFactoryPl
   }
 
   /**
-   * Build media image render array.
+   * Builds a media-image render array for popup image/logo fields.
    *
-   * @param mixed $media_id
+   * @param int|string|null $media_id
    *   The media entity ID.
    * @param string $custom_alt
    *   Custom alt text.
@@ -183,7 +199,7 @@ abstract class ImsPopupBaseBlock extends BlockBase implements ContainerFactoryPl
    *   Custom title text.
    *
    * @return array|null
-   *   The render array or NULL.
+   *   The image render array, or NULL when unavailable.
    */
   protected function buildMediaImageRenderArray($media_id, string $custom_alt = '', string $custom_title = ''): ?array {
     if (empty($media_id)) {
