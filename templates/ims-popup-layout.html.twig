@@ -1,45 +1,48 @@
-{# ims_popup/templates/ims-popup-layout.html.twig #}
-
-<div data-popup-timer="{{ timer|default(0) }}" id='ims_popup'
+<div data-popup-timer="{{ timer|default(0) }}" id="ims_popup"
      data-popup-repeat="{{ repeat|default(1) }}"
      class="ims_popup {% if background == 'On' %}darken_bg {% endif %}"
-     role="dialog" aria-modal="true" aria-labelledby="popup">
+     role="dialog"
+     aria-modal="true"
+     aria-label="{{ title ?: 'Popup'|t }}"
+     tabindex="-1">
 
-    <div class="ims_popup__body">
-      <button id="ims_popup__close" class="{% if logo %}ims_popup_close_white{% else %}ims_popup_close_color{% endif %}" aria-label="Close popup" type="button">&times;</button>
+  <div class="ims_popup__body">
+    <button id="ims_popup__close" class="{% if logo %}ims_popup_close_white{% else %}ims_popup_close_color{% endif %}" aria-label="{{ 'Close popup'|t }}" type="button">&times;</button>
 
-      {% if logo %}
-          <div class="ims_popup__body__logo">
-            {{ logo }}
-          </div>
+    {% if logo %}
+      <div class="ims_popup__body__logo">
+        {{ logo }}
+      </div>
+    {% endif %}
+
+    <div class="ims_popup__body__content">
+      {% if image %}
+        <div class="ims_popup__body__content_image">
+          {{ image }}
+        </div>
       {% endif %}
 
-      <div class="ims_popup__body__content">
-        {% if image %}
-          <div class="ims_popup__body__content_image">
-            {{ image }}
+      <div class="ims_popup__body__content_text">
+        {% if title %}
+          <div class="ims_popup__body__title">
+            <h3>{{ title }}</h3>
           </div>
         {% endif %}
 
-        <div class="ims_popup__body__content_text">
-          {% if title %}
-            <div class="ims_popup__body__title">
-              <h3>{{ title }}</h3>
-            </div>
-          {% endif %}
+        {% if text %}
+          <div class="ims_popup__body__paragraph">
+            <p>{{ text }}</p>
+          </div>
+        {% endif %}
 
-          {% if text %}
-            <div class="ims_popup__body__paragraph">
-              <p>{{ text }}</p>
-            </div>
-          {% endif %}
-
-          {% if link_url %}
-            <div class="ims_popup__body__link {% if not text and not title %}ims_popup__body__link__padding{% endif %}">
-                  <a href="{{ link_url }}" target="{{ link_target }}">{{ link_text }}</a>
-            </div>
-          {% endif %}
-        </div>
+        {% if link_url %}
+          <div class="ims_popup__body__link {% if not text and not title %}ims_popup__body__link__padding{% endif %}">
+            <a href="{{ link_url }}"
+              {% if link_target %}target="{{ link_target }}"{% endif %}
+              {% if link_target == '_blank' %}rel="noopener noreferrer"{% endif %}>{{ link_text }}</a>
+          </div>
+        {% endif %}
       </div>
     </div>
+  </div>
 </div>

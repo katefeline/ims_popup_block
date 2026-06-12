@@ -78,23 +78,37 @@ function ims_popup_paragraph_preprocess_paragraph__ims_popup(&$variables) {
 }
 
 /**
+ * Invalidates cache tags related to an ims_popup paragraph change.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   The changed entity.
+ */
+function ims_popup_paragraph_invalidate_related_cache_tags(\Drupal\Core\Entity\EntityInterface $entity): void {
+  // Only handle ims_popup paragraphs.
+  if ($entity->getEntityTypeId() !== 'paragraph' || $entity->bundle() !== 'ims_popup') {
+    return;
+  }
+
+  $tags = $entity->getCacheTags();
+
+  // Also invalidate parent entity tags (for rendered host page cache).
+  if (method_exists($entity, 'getParentEntity')) {
+    $parent = $entity->getParentEntity();
+    if ($parent) {
+      $tags = \Drupal\Core\Cache\Cache::mergeTags($tags, $parent->getCacheTags());
+    }
+  }
+
+  \Drupal\Core\Cache\Cache::invalidateTags($tags);
+}
+
+/**
  * Implements hook_entity_update().
  *
  * Invalidate block render cache when an ims_popup paragraph is updated.
  */
 function ims_popup_paragraph_entity_update(\Drupal\Core\Entity\EntityInterface $entity) {
-  // Only handle paragraph updates
-  if ($entity->getEntityTypeId() !== 'paragraph') {
-    return;
-  }
-
-  // Only handle ims_popup paragraphs
-  if ($entity->bundle() !== 'ims_popup') {
-    return;
-  }
-
-  // Invalidate block render cache when paragraph changes
-  \Drupal\Core\Cache\Cache::invalidateTags(['block_view']);
+  ims_popup_paragraph_invalidate_related_cache_tags($entity);
 }
 
 /**
@@ -103,18 +117,7 @@ function ims_popup_paragraph_entity_update(\Drupal\Core\Entity\EntityInterface $
  * Invalidate block render cache when an ims_popup paragraph is deleted.
  */
 function ims_popup_paragraph_entity_delete(\Drupal\Core\Entity\EntityInterface $entity) {
-  // Only handle paragraph deletions
-  if ($entity->getEntityTypeId() !== 'paragraph') {
-    return;
-  }
-
-  // Only handle ims_popup paragraphs
-  if ($entity->bundle() !== 'ims_popup') {
-    return;
-  }
-
-  // Invalidate block render cache when paragraph is deleted
-  \Drupal\Core\Cache\Cache::invalidateTags(['block_view']);
+  ims_popup_paragraph_invalidate_related_cache_tags($entity);
 }
 
 /**
@@ -123,17 +126,5 @@ function ims_popup_paragraph_entity_delete(\Drupal\Core\Entity\EntityInterface $
  * Invalidate block render cache when an ims_popup paragraph is created.
  */
 function ims_popup_paragraph_entity_insert(\Drupal\Core\Entity\EntityInterface $entity) {
-  // Only handle paragraph inserts
-  if ($entity->getEntityTypeId() !== 'paragraph') {
-    return;
-  }
-
-  // Only handle ims_popup paragraphs
-  if ($entity->bundle() !== 'ims_popup') {
-    return;
-  }
-
-  // Invalidate block render cache when paragraph is created
-  \Drupal\Core\Cache\Cache::invalidateTags(['block_view']);
+  ims_popup_paragraph_invalidate_related_cache_tags($entity);
 }
-

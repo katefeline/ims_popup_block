@@ -1,4 +1,4 @@
-(function (Drupal, drupalSettings) {
+(function (Drupal, once) {
   Drupal.behaviors.imsPopupBehavior = {
     attach: function (context, settings) {
       once('imsPopupBehavior', '#ims_popup', context).forEach(function () {
@@ -30,5 +30,4 @@
       });
     }
   };
-})(Drupal, drupalSettings);
-console.log(124141241241);
+})(Drupal, once);

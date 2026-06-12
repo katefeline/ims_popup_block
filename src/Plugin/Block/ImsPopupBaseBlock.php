@@ -5,8 +5,7 @@ namespace Drupal\ims_popup\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Extension\ModuleExtensionList;
-use Drupal\Core\File\FileUrlGeneratorInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -25,12 +24,6 @@ abstract class ImsPopupBaseBlock extends BlockBase implements ContainerFactoryPl
    */
   protected EntityTypeManagerInterface $entityTypeManager;
 
-  /**
-   * File URL generator service.
-   *
-   * @var \Drupal\Core\File\FileUrlGeneratorInterface
-   */
-  protected FileUrlGeneratorInterface $fileUrlGenerator;
 
   /**
    * Current route match service.
@@ -40,21 +33,20 @@ abstract class ImsPopupBaseBlock extends BlockBase implements ContainerFactoryPl
   protected RouteMatchInterface $currentRouteMatch;
 
   /**
-   * Module extension list service.
+   * Module handler service.
    *
-   * @var \Drupal\Core\Extension\ModuleExtensionList
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
-  protected ModuleExtensionList $moduleExtensionList;
+  protected ModuleHandlerInterface $moduleHandler;
 
   /**
    * Class constructor for block.
    */
-  public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityTypeManagerInterface $entity_type_manager, FileUrlGeneratorInterface $file_url_generator, RouteMatchInterface $current_route_match, ModuleExtensionList $module_extension_list) {
+  public function __construct(array $configuration, $plugin_id, array $plugin_definition, EntityTypeManagerInterface $entity_type_manager, RouteMatchInterface $current_route_match, ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityTypeManager = $entity_type_manager;
-    $this->fileUrlGenerator = $file_url_generator;
     $this->currentRouteMatch = $current_route_match;
-    $this->moduleExtensionList = $module_extension_list;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -66,9 +58,8 @@ abstract class ImsPopupBaseBlock extends BlockBase implements ContainerFactoryPl
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
-      $container->get('file_url_generator'),
       $container->get('current_route_match'),
-      $container->get('extension.list.module'),
+      $container->get('module_handler'),
     );
   }
 
@@ -425,10 +416,3 @@ abstract class ImsPopupBaseBlock extends BlockBase implements ContainerFactoryPl
   abstract protected function getLibrary(): array;
 
 }
-
-
-
-
-
-
-

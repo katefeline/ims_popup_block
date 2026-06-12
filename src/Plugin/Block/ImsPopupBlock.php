@@ -23,7 +23,7 @@ class ImsPopupBlock extends ImsPopupBaseBlock {
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   protected function getTheme(): string {
     return 'ims_popup_block';
@@ -36,11 +36,10 @@ class ImsPopupBlock extends ImsPopupBaseBlock {
     $libraries = ['ims_popup/ims_popup'];
 
     // Check for enabled submodules and add their libraries.
-    $enabled_modules = \Drupal::moduleHandler()->getModuleList();
-    $submodules = ['ims_popup_maggi', 'ims_popup_buitoni', 'ims_popup_thomy', 'ims_popup_paragraph'];
+    $submodules = ['ims_popup_maggi', 'ims_popup_buitoni', 'ims_popup_thomy'];
 
     foreach ($submodules as $submodule) {
-      if (isset($enabled_modules[$submodule])) {
+      if ($this->moduleHandler->moduleExists($submodule)) {
         $libraries[] = $submodule . '/' . $submodule;
       }
     }

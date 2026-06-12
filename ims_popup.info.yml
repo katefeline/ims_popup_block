@@ -3,8 +3,8 @@ type: module
 description: 'IMS Module for popup window'
 package: IMS
 core_version_requirement: ^10 || ^11
-libraries:
-  - ims_popup/ims_popup
+#libraries:
+#  - ims_popup/ims_popup
 dependencies:
   - drupal:block
   - drupal:media
